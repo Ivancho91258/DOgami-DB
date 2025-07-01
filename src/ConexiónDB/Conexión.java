@@ -26,11 +26,11 @@ public class Conexión {
 			
 			sentencia = conexion.createStatement();
 			
-			String sqlCreateTable = "CREATE TABLE IF NOT EXISTS personas (" +
+			String sqlCreateTable = "CREATE TABLE IF NOT EXISTS usuario (" +
 									"id SERIAL PRIMARY KEY," +
 									"nombre VARCHAR(45) NOT NULL," +
 									"email VARCHAR(25)," +
-									"contrasena_hash VARCHAR(20) NOT NULL," +
+									"contrasena_hash VARCHAR(20) NOT NULL" +
 									")";
 			sentencia.executeUpdate(sqlCreateTable);
 			System.out.println("Tabla 'personas' creada (o ya existía).");
@@ -50,7 +50,7 @@ public class Conexión {
                     String email = resultado.getString("email");
                     String contrasenaHash = resultado.getString("contrasena_hash");
                     
-                    System.out.println("ID: "+ id + ", Nombre: " + nombre + ", Email: " + email + ", Contraseña: " + contrasenaHash);
+                    System.out.println("ID: "+ id + ", Nombre: " + nombre + ", Email: " + email + ", Hash Contraseña: " + contrasenaHash);
 					}
 				
 				}
@@ -73,15 +73,5 @@ public class Conexión {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-
-	private static String hashPassword(String rawPassword1) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	private static boolean checkPassword(String plainPassword, String hashedPassword) {
-		return BCrypt.checkpw(plainPassword, hashedPassword);
 	}
 }
