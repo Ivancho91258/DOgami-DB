@@ -7,5 +7,6 @@
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="C:/Users/ivanc/Downloads/postgresql-42.7.7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ivanc/Downloads/jbcrypt-0.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

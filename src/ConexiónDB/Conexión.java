@@ -4,6 +4,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import org.mindrot.jbcrypt.BCrypt; 
 
 public class Conexión {
 	private static final String URL= "jdbc:postgresql://localhost:5432/DOgami";
@@ -53,11 +54,34 @@ public class Conexión {
 					}
 				
 				}
+		} catch (ClassNotFoundException e) {
+			System.err.println("Error: El driver JDBC de PostgreSQL no se encontró. Asegúrate de que el JAR esté en el classpath.");
+			e.printStackTrace();
+			
+		} catch (SQLException e) {
+			System.err.println("Error de conexión a la base de datos o SQL. Revisa tus credenciales y configuración de DB.");
+            e.printStackTrace();
+		} finally {
+			try {
+				if (resultado != null) resultado.close();
+				if (sentencia != null) sentencia.close();
+				if (conexion != null) conexion.close();
+				System.out.println("Conexión a PostgreSQL cerrada.");
+				
+			} catch (SQLException e) {
+				System.err.println("Error al cerrar los recursos de la base de datos:");
+				e.printStackTrace();
+			}
 		}
 	}
+	
 
 	private static String hashPassword(String rawPassword1) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private static boolean checkPassword(String plainPassword, String hashedPassword) {
+		return BCrypt.checkpw(plainPassword, hashedPassword);
 	}
 }
