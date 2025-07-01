@@ -4,7 +4,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
-import org.mindrot.jbcrypt.BCrypt; 
 
 public class Conexión {
 	private static final String URL= "jdbc:postgresql://localhost:5432/DOgami";
@@ -29,7 +28,7 @@ public class Conexión {
 			String sqlCreateTable = "CREATE TABLE IF NOT EXISTS usuario (" +
 									"id SERIAL PRIMARY KEY," +
 									"nombre VARCHAR(45) NOT NULL," +
-									"email VARCHAR(25)," +
+									"correo VARCHAR(25)," +
 									"contrasena_hash VARCHAR(20) NOT NULL" +
 									")";
 			sentencia.executeUpdate(sqlCreateTable);
@@ -37,7 +36,7 @@ public class Conexión {
 			
 			/* Ejemplo de consulta de datos */
 			
-			String sqlSelect = "SELECT id, nombre, email, contrasena_hash FROM usuario";
+			String sqlSelect = "SELECT id, nombre, correo, contraseña FROM usuario";
 			resultado = sentencia.executeQuery(sqlSelect);
 			
 			System.out.println("Datos en la tabla 'usuario':");
@@ -47,10 +46,10 @@ public class Conexión {
 				while (resultado.next()) {
 					int id = resultado.getInt("id");
                     String nombre = resultado.getString("nombre");
-                    String email = resultado.getString("email");
-                    String contrasenaHash = resultado.getString("contrasena_hash");
+                    String correo = resultado.getString("correo");
+                    String contraseña = resultado.getString("contraseña");
                     
-                    System.out.println("ID: "+ id + ", Nombre: " + nombre + ", Email: " + email + ", Hash Contraseña: " + contrasenaHash);
+                    System.out.println("ID: "+ id + ", Nombre: " + nombre + ", Correo: " + correo + ", Contraseña: " + contraseña);
 					}
 				
 				}
