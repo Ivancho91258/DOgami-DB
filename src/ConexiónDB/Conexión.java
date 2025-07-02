@@ -7,68 +7,44 @@ import java.sql.ResultSet;
 
 public class Conexión {
 	private static final String URL= "jdbc:postgresql://localhost:5432/DOgami";
-	private static final String USUARIO_DB = "IvanMolina";
-	private static final String CONTRASENA_DB = "Maorintak1.";
+	private static final String USUARIO = "IvanMolina";
+	private static final String CONTRASENA = "Maorintak1.";
 	
 	public static void main(String[] args) {
 		Connection conexion = null;
-		Statement sentencia = null;
-		ResultSet resultado = null;
 		
 		try {
+			
+			// 1. Cargar el driver JDBC de PostgreSQL
 			
 			Class.forName("org.postgresql.Driver");
 			System.out.println("Driver JDBC de PostgreSQL cargado correctamente");
 			
-			conexion = DriverManager.getConnection(URL, USUARIO_DB, CONTRASENA_DB);
+			
+			// 2. Establecer la conexión con la base de datos
+			
+			conexion = DriverManager.getConnection(URL, USUARIO, CONTRASENA);
 			System.out.println("Conexión exitosa a PostgreSQL");
 			
-			sentencia = conexion.createStatement();
-			
-			String sqlCreateTable = "CREATE TABLE IF NOT EXISTS usuario (" +
-									"id SERIAL PRIMARY KEY," +
-									"nombre VARCHAR(45) NOT NULL," +
-									"correo VARCHAR(25)," +
-									"contrasena_hash VARCHAR(20) NOT NULL" +
-									")";
-			sentencia.executeUpdate(sqlCreateTable);
-			System.out.println("Tabla 'personas' creada (o ya existía).");
-			
-			/* Ejemplo de consulta de datos */
-			
-			String sqlSelect = "SELECT id, nombre, correo, contraseña FROM usuario";
-			resultado = sentencia.executeQuery(sqlSelect);
-			
-			System.out.println("Datos en la tabla 'usuario':");
-			if (!resultado.isBeforeFirst()){
-				System.out.println("No hay usuarios registrados en la tabla 'usuario'");
-			} else {
-				while (resultado.next()) {
-					int id = resultado.getInt("id");
-                    String nombre = resultado.getString("nombre");
-                    String correo = resultado.getString("correo");
-                    String contraseña = resultado.getString("contraseña");
-                    
-                    System.out.println("ID: "+ id + ", Nombre: " + nombre + ", Correo: " + correo + ", Contraseña: " + contraseña);
-					}
-				
-				}
 		} catch (ClassNotFoundException e) {
 			System.err.println("Error: El driver JDBC de PostgreSQL no se encontró. Asegúrate de que el JAR esté en el classpath.");
 			e.printStackTrace();
 			
 		} catch (SQLException e) {
-			System.err.println("Error de conexión a la base de datos o SQL. Revisa tus credenciales y configuración de DB.");
+			System.err.println("Error de conexión a la base de datos. Revisa tus credenciales y configuración de DB.");
             e.printStackTrace();
 		} finally {
+			
+			// 3. Cerrar la conexión y otros recursos (importante para liberar recursos)
+			
 			try {
-				if (resultado != null) resultado.close();
-				if (sentencia != null) sentencia.close();
-				if (conexion != null) conexion.close();
+				if (conexion != null) {
+					conexion.close();
+				}
 				System.out.println("Conexión a PostgreSQL cerrada.");
 				
 			} catch (SQLException e) {
-				System.err.println("Error al cerrar los recursos de la base de datos:");
+				System.err.println("Error al cerrar la conexión de la base de datos:");
 				e.printStackTrace();
 			}
 		}
