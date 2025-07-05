@@ -89,14 +89,62 @@ public class Conexión {
 						}
 					}
 				}
-			} catch (ClassNotFoundException e) {
+			//Modificación de un usuario
+			
+			System.out.println("Modificando usuario existente: ");
+			String idUsuarioaModificar = "1"; // Modificaremos el usuario con id 1
+			String nuevaContraseña = "Cl@ve.segur@.2025";
+			
+			String sqlUpdate = "UPDATE usuario SET contraseña = ? WHERE id = ?";
+			
+			try (PreparedStatement pstmtUpdate = conexion.prepareStatement(sqlUpdate)){
+					pstmtUpdate.setString(1, nuevaContraseña);
+					pstmtUpdate.setString(2, idUsuarioaModificar);
+					
+					int filasAfectadas = pstmtUpdate.executeUpdate();
+					
+					if (filasAfectadas > 0) {
+						System.out.println("Usuario con ID "+idUsuarioaModificar+" modificado con exito");
+					}else {
+						System.out.println("No existe el usuario con ID "+idUsuarioaModificar);
+					}
+			}catch (SQLException e) {
+						System.err.println("Error al modificar el usuario "+e.getMessage());
+					}
+		// Eliminar un usuario
+		
+		System.out.println("Se eliminará un usuario:");
+		String idUsuarioaEliminar = "3";
+		String sqlDelete = "DELETE FROM usuario WHERE id = ?";
+			
+		try (PreparedStatement pstmtDelete = conexion.prepareStatement(sqlDelete)){
+			pstmtDelete.setString(1, idUsuarioaEliminar);
+			int filasAfectadas = pstmtDelete.executeUpdate();
+			if (filasAfectadas > 0) {
+				System.out.println ("Usuario con ID "+idUsuarioaEliminar+" eliminado");
+			} else {
+				System.err.println("No existe el usuario con ID "+idUsuarioaEliminar);
+			}
+		}catch (SQLException e) {
+				System.err.println("No se puede moficiar el usuario "+e.getMessage());
+				
+			}
+		}catch (ClassNotFoundException e) {
 			
 				System.err.print("Error: El driver no se cargo correctamente");
 				e.printStackTrace();
 			} catch (SQLException e) {
 				System.err.print("Error de conexión con la base de datos, revisa tus credenciales");
 				e.printStackTrace();
-				} 
-		}
-	}
-			
+			}finally {
+					if (conexion !=null) {
+						try {
+							conexion.close();
+							System.out.println("\nConexión cerrada exitosamente");
+							}catch (SQLException e) {
+								System.err.println("Error al cerrar la conexión "+e.getMessage());
+							}
+						}
+					}
+				}
+			}
